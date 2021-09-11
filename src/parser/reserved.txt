@@ -1,0 +1,56 @@
+// allow user to override
+// must release the override table
+
+// looping
+tag("do"),
+tag("for"),
+tag("while"),
+tag("loop"),
+tag("continue"),
+tag("break"),
+tag("goto"),
+
+// conditional
+tag("if"),
+tag("else"),
+tag("switch"),
+tag("case"),
+tag("match"),
+
+// top level
+tag("struct"),
+tag("module"),
+tag("import"),
+tag("pub"),
+
+// type
+tag("auto"),
+tag("int"),
+tag("char"),
+tag("wchar_t"),
+tag("float"),
+tag("double"),
+tag("long"),
+tag("short"),
+tag("size_t"),
+tag("bool"),
+tag("void"),
+
+// modifier
+tag("unsigned"),
+tag("thread_local"),
+tag("static"),
+tag("const"),
+//long
+//short
+
+// value
+tag("default"),
+tag("nullptr"),
+
+// error handling
+tag("try"),
+tag("catch"),
+tag("throw"),
+//continue
+//break
