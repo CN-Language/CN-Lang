@@ -199,10 +199,14 @@ void f(struct{int a;|}^ s);
 ```
 
 ## interface
+- This type
+
+
 ```cn
 interface Name{
-    void function_def(Ty,Ty);
+    void function_def(This *this,Ty,Ty);
 }
+
 // interface pointer/ value will be treat like template
 void function(Name* name);
 
@@ -685,6 +689,7 @@ label:
 ```
 
 ## Coroutine
+TODO: futhur discustions
 stackful coroutine is implemented for async
 the stack of coroutine is much more smaller than the normal stack for thread
 so coroutine is just for concurrency
@@ -699,6 +704,18 @@ so coroutine is just for concurrency
             return;
         }
     }
+}
+```
+
+## where clause
+```cn
+// a simple callback function
+callback (tyy a) where{
+    callback = void(int,int),
+    tyy = int,
+}
+{
+    //...
 }
 ```
 

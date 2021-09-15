@@ -55,6 +55,7 @@ pub fn ty(s: &str) -> IResult<&str, &str> {
         tag("f32"),
         tag("f64"),
         tag("fp128"),
+        tag("where"),
     ))(s)
 }
 

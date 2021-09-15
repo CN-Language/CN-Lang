@@ -7,7 +7,14 @@ mod name;
 pub mod expr;
 mod ident;
 pub mod stmt;
+mod ty;
 mod utils;
+
+trait Parse {
+    fn parse(s: &str) -> IResult<&str, Self>
+    where
+        Self: Sized;
+}
 
 #[derive(Debug, PartialEq)]
 pub enum Ident {

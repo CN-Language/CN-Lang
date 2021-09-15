@@ -1,4 +1,10 @@
-use nom::combinator::map;
+use std::rc::Rc;
+
+use nom::character::complete::digit1;
+use nom::combinator::{map, opt};
+use nom::error::Error;
+use nom::multi::{separated_list0, separated_list1};
+use nom::sequence::{pair, tuple};
 use nom::{
     bytes::complete::{tag, take_until, take_while},
     combinator::not,
@@ -6,32 +12,34 @@ use nom::{
     IResult,
 };
 
-use super::is_ws;
+use super::{is_ws, ws};
 
-fn ignore_ws(s: &str) -> IResult<&str, String> {
-    let mut res = String::new();
-    let (mut o, mut i) = take_while(|s| !is_ws(s))(s)?;
-    res += i;
-    if o != "" {
-        let (oo, _) = take_while(is_ws)(o)?;
-        o = oo;
-        let (oo, s) = ignore_ws(o)?;
-        o = oo;
-        res += &s;
-    }
-    Ok((o, res))
+pub fn list0<'a, O>(
+    s: &'static str,
+    e: &'static str,
+    inner: impl Fn(&'a str) -> IResult<&'a str, O>,
+) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<O>> {
+    delimited(
+        pair(tag(s), opt(ws)),
+        separated_list0(pair(tag(","), opt(ws)), inner),
+        tuple((opt(ws), opt(tag(",")), opt(ws), tag(e))),
+    )
 }
 
-fn list<'a, 'b, O, F: Fn(&str) -> O>(
-    s: &'a str,
-    parent: (&'b str, &'b str),
-    f: F,
-) -> IResult<&'a str, O> {
-    delimited(tag(parent.0), map(ignore_ws, |s| f(&s)), tag(parent.1))(s)
+pub fn list1<'a, O>(
+    s: &'static str,
+    e: &'static str,
+    inner: impl Fn(&'a str) -> IResult<&'a str, O>,
+) -> impl FnMut(&'a str) -> IResult<&'a str, Vec<O>> {
+    delimited(
+        pair(tag(s), opt(ws)),
+        separated_list1(pair(tag(","), opt(ws)), inner),
+        tuple((opt(ws), opt(tag(",")), opt(ws), tag(e))),
+    )
 }
 
 #[test]
-fn test_ignore_ws() {
-    let s = "aaa   bb \t ccccc \n dd";
-    println!("{:?}", ignore_ws(s));
+fn test_list() {
+    let ls = "(\n\t\r1,     2,\n3,\t 4,5   , \t )";
+    println!("{:?}", list0("(", ")", digit1)(ls))
 }
